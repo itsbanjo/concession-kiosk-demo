@@ -4,16 +4,15 @@ Requirements:
 
 2. create an ansible-vault named .majikmike in your working directory and should contain the following variables listed below. These are used for cloning a template and preconfiguring the network, hostname, and DNS name using open-vm-tools:
 
-3. For demo purposes, you can create a .passwd file that contains the vault password for ease of use. However, you must delete these after demo.
+3. For demo purposes, you can create a .passwd file that contains the vault password for ease of use. However, you must delete these after demo.  
 
-vcenter_hostname: 
-vcenter_username:
-vcenter_password:
-datacenter: 
-ansible_ssh_pass: 
+vcenter_hostname:  
+vcenter_username:  
+vcenter_password:  
+datacenter:   
+ansible_ssh_pass:  
 
-
-4. community.vmware  
+4. community.vmware  collection is required
 
 To provision a VM using vmware_guest module:
 ansible-playbook provision.yaml --vault-password-file .passwd -i inventory 
