@@ -6,11 +6,11 @@ Requirements:
 
 3. For demo purposes, you can create a .passwd file that contains the vault password for ease of use. However, you must delete these after demo.  
 
-vcenter_hostname:  
+`` vcenter_hostname:  
 vcenter_username:  
 vcenter_password:  
 datacenter:   
-ansible_ssh_pass:  
+ansible_ssh_pass:  ``
 
 4. community.vmware  collection is required
 
