@@ -1,0 +1,28 @@
+all:
+  children:
+    frontend:
+      hosts: 
+        frontend.lab.integrate.zone:
+      vars:
+        ansible_user: root
+        ip_address: 192.168.2.123
+        ip_mask: 255.255.255.0
+        gateway: 192.168.2.1
+    backend: 
+      hosts:
+        backend.lab.integrate.zone:
+      vars:
+        ansible_user: root
+        ip_address: 192.168.2.124
+        ip_mask: 255.255.255.0
+        gateway: 192.168.2.1
+    mongodb:
+      hosts:
+        mongodb.lab.integrate.zone:
+      vars:
+        ansible_user: root
+        ip_address: 192.168.2.125
+        ip_mask: 255.255.255.0
+        gateway: 192.168.2.1
+  vars:
+    domain: lab.integrate.zone

@@ -1,0 +1,72 @@
+---
+- name: Deploy frontend application
+  hosts: frontend
+  gather_facts: no
+  
+  vars:
+    - deploy_dir: /var/www/concession-kiosk-frontend
+
+  vars_files:
+    - .majikmike
+
+
+  tasks:
+
+  - name: Install nodejs and git
+    ansible.builtin.yum: 
+      name: 
+        - nodejs
+        - git
+      state: present
+
+  - name: Create user kiosk
+    user:
+      name: kiosk
+      comment: Concession Kiosk Frontend user
+
+  - name: Create home directory for concession kiosk frontend
+    ansible.builtin.file:
+      path: "{{ deploy_dir }}"
+      owner: kiosk
+      group: kiosk
+      state: directory
+
+  - name: Clone frontend application
+    ansible.builtin.git: 
+      repo: https://github.com/jankleinert/concession-kiosk-frontend.git 
+      dest: "{{ deploy_dir }}"
+    become: yes
+    become_user: kiosk
+
+  - name: Open port 8080 for the application
+    firewalld:
+      port: 8080/tcp
+      permanent: yes
+      state: enabled
+      immediate: true
+
+  - name: Disable SELinux for demo purposes
+    ansible.posix.selinux:
+      policy: targeted
+      state: permissive
+
+  - name: Copy frontend systemd
+    copy:
+      src: systemd/frontend.service
+      dest: /lib/systemd/system/
+
+  - name: Reload systemd
+    systemd:
+      daemon_reload: true
+
+  - name: Install npm packages
+    command: "npm install --quiet --silent"
+    args:
+      chdir: "{{ deploy_dir }}"
+
+  - name: Start frontend
+    systemd:
+      name: frontend
+      state: started
+      enabled: true
+

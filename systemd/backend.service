@@ -1,0 +1,24 @@
+[Unit]
+Description=Backend nodejs service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+WorkingDirectory=/var/www/concession-kiosk-backend
+ExecStart=/usr/bin/npm start
+Environment=username=concession
+Environment=password=concession_admin
+Environment=database_name=concession
+Environment=DATABASE_SERVICE_NAME=mongodb.lab.integrate.zone
+User=kiosk
+Group=kiosk
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=MyApp
+
+[Install]
+WantedBy=multi-user.target
+

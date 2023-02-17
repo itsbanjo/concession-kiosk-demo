@@ -1,0 +1,60 @@
+---
+- name: Deploy mongodb
+  hosts: mongodb
+  gather_facts: no
+
+  vars_files:
+    - .majikmike
+
+  tasks:
+
+  - name: Disable SELinux for demo purposes
+    ansible.posix.selinux:
+      policy: targeted
+      state: permissive
+
+  - name: install pymongo
+    pip:
+      name: pymongo
+      state: present
+
+  - name: Add MongoDB repository
+    ansible.builtin.yum_repository:
+      name: MongoDB
+      description: MongoDB Repository
+      baseurl: https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/4.4/x86_64/
+      gpgcheck: yes
+      enabled: yes
+      gpgkey: https://www.mongodb.org/static/pgp/server-4.4.asc
+
+  - name: Install mongodb
+    ansible.builtin.yum: 
+      name: 
+        - mongodb-org
+      state: present
+
+  - name: Open port 27017 for mongodb
+    firewalld:
+      port: 27017/tcp
+      permanent: yes
+      state: enabled
+      immediate: true
+
+  - name: Change bind address to 0.0.0.0
+    lineinfile:
+      path: /etc/mongod.conf
+      regexp: 'bindIp:'
+      line: "  bindIp: 0.0.0.0"
+
+  - name: Start mongodb service
+    systemd:
+      name: mongod
+      state: started
+      enabled: true
+
+  - name: Create mongodb username concession and password
+    community.mongodb.mongodb_user:
+      database: concession
+      name: concession
+      password: concession_admin
+      state: present
