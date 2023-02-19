@@ -6,6 +6,7 @@
   
   vars:
     template: RHEL8-U2HW15
+    folder: /Testing
     bootstrap_foreman_fqdn: satellite.lab.integrate.zone
     bootstrap_download_method: http
     bootstrap_org: "IntegrateZone"
@@ -34,7 +35,7 @@
       password: "{{ vcenter_password }}"
       datacenter: "{{ datacenter }}"
       state: present
-      folder: /Testing
+      folder: "{{ folder }}"
       template: "{{ template }}"
       name: "{{ inventory_hostname }}"
       networks:
@@ -55,6 +56,21 @@
           - lab.integrate.zone
     delegate_to: localhost
     register: newvm
+
+  - name: Confirm that we cloned the virtual machine successfully located in "{{ datacenter }} in {{ folder }}"
+    community.vmware.vmware_guest_info:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter: "{{ datacenter }}"
+      folder: "{{ folder }}"
+      name: "{{ inventory_hostname }}"
+    delegate_to: localhost
+    register: vm_guest_info
+
+  - name: Confirm "{{ inventory_hostname }}" is available and print out the status
+    debug: 
+      msg: "{{ inventory_hostname }}: powered state: {{ vm_guest_info.instance.hw_power_status }} uuid: {{ vm_guest_info.instance.instance_uuid }}"
 
   - name: download bootstrap.py from {{ bootstrap_foreman_fqdn }}
     get_url:
