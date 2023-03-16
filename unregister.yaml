@@ -1,0 +1,11 @@
+---
+- name: Deploy frontend application
+  hosts: all
+  gather_facts: no
+  
+  tasks:
+
+    - name: Run the subscription-manager
+      redhat_subscription:
+        state: absent
+

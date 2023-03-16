@@ -1,3 +1,4 @@
 *.majikmike*
 *.passwd
 *collection/*
+*.vagrant

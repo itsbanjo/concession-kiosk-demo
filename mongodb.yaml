@@ -8,6 +8,33 @@
 
   tasks:
 
+  - name: Check if platform is Virtualbox
+    lineinfile:
+       dest: /sys/devices/virtual/dmi/id/sys_vendor
+       line: "innotek GmbH"
+    check_mode: yes
+    register: virtualbox
+    failed_when: (virtualbox is changed) or (virtualbox is failed)
+    ignore_errors: true
+
+  - name: Set fact for Virtual
+    set_fact:
+      physical: false
+      virtual: true
+    when: virtualbox
+
+  - name: Register if system is virtualbox
+    block:
+      - name: Run the subscription-manager
+        redhat_subscription:
+          state: present
+          username: "{{ rhsm_username }}"
+          password: "{{ rhsm_password }}"
+          pool: "{{ rhsm_pool_id }}"
+        register: subs_status
+    when: virtualbox
+
+
   - name: Disable SELinux for demo purposes
     ansible.posix.selinux:
       policy: targeted
@@ -58,3 +85,9 @@
       name: concession
       password: concession_admin
       state: present
+
+  - name: Build a hosts file
+    template:
+      src: hosts.j2
+      dest: /etc/hosts
+

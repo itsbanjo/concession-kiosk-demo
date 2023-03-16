@@ -1,0 +1,290 @@
+---
+- name: Deploy three tier application
+  hosts: all
+  gather_facts: yes
+  
+  vars:
+    - deploy_dir: /var/www/concession-kiosk-frontend
+
+  vars_files:
+    - .majikmike
+
+  tasks:
+
+    - name: Execute if the hosts is frontend
+      block:
+        - name: Check if the frontend hosts is a Virtualbox 
+          lineinfile:
+            dest: /sys/devices/virtual/dmi/id/sys_vendor
+            line: "innotek GmbH"
+          check_mode: yes
+          register: virtualbox
+          failed_when: (virtualbox is changed) or (virtualbox is failed)
+          ignore_errors: true
+
+        - name: Set fact for Virtual
+          set_fact:
+            physical: false
+            virtual: true
+          when: virtualbox
+
+        - name: Register if system is virtualbox
+          block:
+            - name: Run the subscription-manager
+              redhat_subscription:
+               state: present
+               username: "{{ rhsm_username }}"
+               password: "{{ rhsm_password }}"
+               pool: "{{ rhsm_pool_id }}"
+              register: subs_status
+          when: virtualbox
+ 
+        - name: Install nodejs and git
+          ansible.builtin.yum: 
+            name: 
+              - nodejs
+              - git
+            state: present
+
+        - name: Create user kiosk
+          user:
+            name: kiosk
+            comment: Concession Kiosk Frontend user
+
+        - name: Create home directory for concession kiosk frontend
+          ansible.builtin.file:
+            path: "{{ deploy_dir }}"
+            owner: kiosk
+            group: kiosk
+            state: directory
+
+        - name: Clone frontend application
+          ansible.builtin.git: 
+            repo: https://github.com/jankleinert/concession-kiosk-frontend.git 
+            dest: "{{ deploy_dir }}"
+          become: yes
+          become_user: kiosk
+
+        - name: Open port 8080 for the application
+          firewalld:
+            port: 8080/tcp
+            permanent: yes
+            state: enabled
+            immediate: true
+
+        - name: Disable SELinux for demo purposes
+          ansible.posix.selinux:
+            policy: targeted
+            state: permissive
+
+        - name: Copy frontend systemd
+          copy:
+            src: systemd/frontend.service
+            dest: /lib/systemd/system/
+
+        - name: Reload systemd
+          systemd:
+            daemon_reload: true
+
+        - name: Install npm packages
+          command: "npm install --quiet --silent"
+          args:
+            chdir: "{{ deploy_dir }}"
+
+        - name: Start frontend
+          systemd:
+            name: frontend
+            state: started
+            enabled: true
+
+        - name: Build a hosts file
+          template:
+            src: hosts.j2
+            dest: /etc/hosts
+
+      when: "'frontend' in inventory_hostname"
+
+    - name: Execute if the hosts is backend
+      block:
+        - name: Update deploy_dir variable for backend
+          set_fact:
+            deploy_dir: /var/www/concession-kiosk-backend
+
+        - name: Check if backend hosts is a Virtualbox
+          lineinfile:
+            dest: /sys/devices/virtual/dmi/id/sys_vendor
+            line: "innotek GmbH"
+          check_mode: yes
+          register: virtualbox
+          failed_when: (virtualbox is changed) or (virtualbox is failed)
+          ignore_errors: true
+
+        - name: Set fact for Virtual
+          set_fact:
+            physical: false
+            virtual: true
+          when: virtualbox
+
+        - name: Register if system is virtualbox
+          block:
+            - name: Run the subscription-manager
+              redhat_subscription:
+                state: present
+                username: "{{ rhsm_username }}"
+                password: "{{ rhsm_password }}"
+                pool: "{{ rhsm_pool_id }}"
+              register: subs_status
+          when: virtualbox
+
+
+        - name: Install nodejs and git
+          ansible.builtin.yum: 
+            name: 
+              - nodejs
+              - git
+            state: present
+
+        - name: Create user kiosk
+          user:
+            name: kiosk
+            comment: Concession Kiosk Frontend user
+
+        - name: Create home directory for concession kiosk backend
+          ansible.builtin.file:
+            path: "{{ deploy_dir }}"
+            owner: kiosk
+            group: kiosk
+            state: directory
+
+        - name: Clone backend application
+          ansible.builtin.git: 
+            repo: https://github.com/jankleinert/concession-kiosk-backend.git 
+            dest: "{{ deploy_dir }}"
+          become: yes
+          become_user: kiosk
+
+        - name: Open port 8080 for the application
+          firewalld:
+            port: 8080/tcp
+            permanent: yes
+            state: enabled
+            immediate: true
+
+        - name: Disable SELinux for demo purposes
+          ansible.posix.selinux:
+            policy: targeted
+            state: permissive
+
+        - name: Copy backend systemd
+          copy:
+            src: systemd/backend.service
+            dest: /lib/systemd/system/
+
+        - name: Reload systemd
+          systemd:
+            daemon_reload: true
+
+        - name: Install npm packages
+          command: "npm install --quiet --silent"
+          args:
+            chdir: "{{ deploy_dir }}"
+
+        - name: Start backend
+          systemd:
+            name: backend
+            state: started
+            enabled: true
+
+        - name: Build a hosts file
+          template:
+            src: hosts.j2
+            dest: /etc/hosts
+
+      when: "'backend' in inventory_hostname"
+
+    - name: Execute if the hosts is mongodb
+      block:
+        - name: Check if the mongodb hosts is a Virtualbox
+          lineinfile:
+             dest: /sys/devices/virtual/dmi/id/sys_vendor
+             line: "innotek GmbH"
+          check_mode: yes
+          register: virtualbox
+          failed_when: (virtualbox is changed) or (virtualbox is failed)
+          ignore_errors: true
+
+        - name: Set fact for Virtual
+          set_fact:
+            physical: false
+            virtual: true
+          when: virtualbox
+
+        - name: Register if system is virtualbox
+          block:
+            - name: Run the subscription-manager
+              redhat_subscription:
+                state: present
+                username: "{{ rhsm_username }}"
+                password: "{{ rhsm_password }}"
+                pool: "{{ rhsm_pool_id }}"
+              register: subs_status
+          when: virtualbox
+
+
+        - name: Disable SELinux for demo purposes
+          ansible.posix.selinux:
+            policy: targeted
+            state: permissive
+
+        - name: install pymongo
+          pip:
+            name: pymongo
+            state: present
+
+        - name: Add MongoDB repository
+          ansible.builtin.yum_repository:
+            name: MongoDB
+            description: MongoDB Repository
+            baseurl: https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/4.4/x86_64/
+            gpgcheck: yes
+            enabled: yes
+            gpgkey: https://www.mongodb.org/static/pgp/server-4.4.asc
+
+        - name: Install mongodb
+          ansible.builtin.yum: 
+            name: 
+              - mongodb-org
+            state: present
+
+        - name: Open port 27017 for mongodb
+          firewalld:
+            port: 27017/tcp
+            permanent: yes
+            state: enabled
+            immediate: true
+
+        - name: Change bind address to 0.0.0.0
+          lineinfile:
+            path: /etc/mongod.conf
+            regexp: 'bindIp:'
+            line: "  bindIp: 0.0.0.0"
+
+        - name: Start mongodb service
+          systemd:
+            name: mongod
+            state: started
+            enabled: true
+
+        - name: Create mongodb username concession and password
+          community.mongodb.mongodb_user:
+            database: concession
+            name: concession
+            password: concession_admin
+            state: present
+
+        - name: Build a hosts file
+          template:
+            src: hosts.j2
+            dest: /etc/hosts
+        
+      when: "'mongodb' in inventory_hostname"
