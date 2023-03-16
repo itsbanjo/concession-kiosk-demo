@@ -36,3 +36,6 @@ To deploy the applications and MongoDB server:
 *ansible-playbook frontend.yaml --vault-password-file .passwd -i inventory  
 ansible-playbook backend.yaml --vault-password-file .passwd -i inventory  
 ansible-playbook mongodb.yaml --vault-password-file .passwd -i inventory*
+
+
+## Test
