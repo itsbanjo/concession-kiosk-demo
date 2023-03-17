@@ -15,7 +15,7 @@ This is intended for beginners to intermediate in containerized applications and
 ## Requirements:
 
 1. A working access to access.redhat.com for registering the VM to Red Hat using the *Red Hat Developer Subscription for Individual*.
-2. The pool ID for your *Red Hat Developer Subscription for Individual* that will be later used in a YAML file.
+2. The pool ID for your *Red Hat Developer Subscription for Individual* that is required in *config.yaml* to successfully register the VM.
 3. For VM's deployed in VMWare, a working account that is able to provision a VM is required. 
 5. An optional configured Satellite to use Activation Keys. The playbook will switch to manual subscription method via access.redhat.com
 
@@ -29,24 +29,25 @@ This is intended for beginners to intermediate in containerized applications and
 | backend   | 192.168.100.104 | 
 | mongodb   | 192.168.100.105 | 
 
-The playbook may attempt to connect to a different IP. Update the *inventory* to connect successfully.   
+The playbook may attempt to connect to a different IP. Update the ***inventory*** accordingly. 
 
 2. During the provisionining, it will ask you which interface to use.  Choose the one that is plugged in to your current network to create a bridge connection to your subnet.
+   
 3. Run *ansible-playbook -i inventory --vault-password-file .passwd all.yaml -u vagrant*
 
    
-
-
 ### VCenter deployment 
 
-1. A RHEL8 VM template must be available for use before you can start provisioning the three tier application. 
-2. The VM must contain open-vm-tools and perl for the VMware customization to successfully apply in the IP addresses. 
-3. 
-4. By default, the VM's are located in the /Testing folder of the in the VSphere. But this can be change at anytime by editing the *provision.yaml* 
-5.  All three nodes must be reachable by the ansible controller node and are able to successfully intercommunicate. Its preferred that these VM's are in the same VLAN and a flat subnet for demo purposes to ensure a simple and successful deployment. 
-6. Create an ansible-vault named .majikmike in your working directory and should contain the following variables listed below. These are used for cloning a template and preconfiguring the network, hostname, and DNS name using open-vm-tools:
-7. For demo purposes, you can create a .passwd file that contains the vault password for ease of use. However, you must delete these after demo.  
 
+1. The configuration for the folder, VM template name, and network VLAN is located in configuration.yaml which is exclusive for provision.yaml
+   
+2. 3. To skip auto-registering to Satellite, simply leave bootstrap_foreman_fqdn in config.yaml empty.
+   
+3. A RHEL8 VM template must be available for use before you can start provisioning the three tier application. Ensure that VM template contains open-vm-tools and perl for the VMware customization to successfully apply the network customizations. 
+   
+4. All three nodes must be reachable by the ansible controller node and are able to successfully intercommunicate. Its preferred that these VM's are in the same VLAN and a flat subnet for demo purposes to ensure a simple and successful deployment. 
+   
+5. Create an ansible-vault named .majikmike in your working directory and should contain the following variables listed below. These are used for cloning a template and preconfiguring the network, hostname, and DNS name using open-vm-tools:
 
     vcenter_hostname:
     vcenter_username:  
@@ -57,14 +58,19 @@ The playbook may attempt to connect to a different IP. Update the *inventory* to
     rhsm_password: 
     rhsm_pool_id: 
 
+6. For demo purposes, you can create a .passwd file that contains the vault password for ease of use. However, you must delete these after demo.  
 
-
-8. community.vmware  collection is required
+8. community.vmware  collection is required which required pyvmomi installed via pip
+    ansible-galaxy install collection community.vmware
+    pip3 install pyvmomi
 
 ## Provisioning
 
 To provision a VM in VCenter: 
-*ansible-playbook provision.yaml --vault-password-file .passwd -i inventory *
+   $ ansible-playbook provision.yaml --vault-password-file .passwd -i inventory
+
+To provisioning using VirtualBox
+   $ vagrant up 
 
 To deploy the applications and MongoDB server:  
-*ansible-playbook all.yaml --vault-password-file .passwd -i inventory  
+   $ ansible-playbook all.yaml --vault-password-file .passwd -i inventory  
