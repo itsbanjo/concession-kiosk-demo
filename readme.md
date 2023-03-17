@@ -33,7 +33,8 @@ The playbook may attempt to connect to a different IP. Update the ***inventory**
 
 2. During the provisionining, it will ask you which interface to use.  Choose the one that is plugged in to your current network to create a bridge connection to your subnet.
    
-3. Run *ansible-playbook -i inventory --vault-password-file .passwd all.yaml -u vagrant*
+3. Run 
+   ansible-playbook -i inventory --vault-password-file .passwd all.yaml -u vagrant
 
    
 ### VCenter deployment 
