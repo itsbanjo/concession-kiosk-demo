@@ -50,14 +50,14 @@ The playbook may attempt to connect to a different IP. Update the ***inventory**
    
 5. Create an ansible-vault named .majikmike in your working directory and should contain the following variables listed below. These are used for cloning a template and preconfiguring the network, hostname, and DNS name using open-vm-tools:
 
-    vcenter_hostname:
-    vcenter_username:  
-    vcenter_password:  
-    datacenter:  
-    ansible_ssh_pass:  
-    rhsm_username: 
-    rhsm_password: 
-    rhsm_pool_id: 
+       vcenter_hostname:
+       vcenter_username:  
+       vcenter_password:  
+       datacenter:  
+       ansible_ssh_pass:  
+       rhsm_username: 
+       rhsm_password: 
+       rhsm_pool_id: 
 
 6. For demo purposes, you can create a .passwd file that contains the vault password for ease of use. However, you must delete these after demo.  
 
