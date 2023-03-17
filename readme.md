@@ -63,18 +63,18 @@ The playbook may attempt to connect to a different IP. Update the ***inventory**
 
 8. community.vmware  collection is required which required pyvmomi installed via pip   
 
-    ansible-galaxy install collection community.vmware
-    pip3 install pyvmomi
+       ansible-galaxy install collection community.vmware
+       pip3 install pyvmomi
 
 ## Provisioning
 
 To provision a VM in VCenter:
 
-   $ ansible-playbook provision.yaml --vault-password-file .passwd -i inventory
+       $ ansible-playbook provision.yaml --vault-password-file .passwd -i inventory
 
 To provisioning using VirtualBox
-
-   $ vagrant up 
+  
+       $ vagrant up 
 
 To deploy the applications and MongoDB server:  
 
