@@ -4,23 +4,9 @@
   serial: 1
   gather_facts: no
   
-  vars:
-    template: RHEL8-U2HW15
-    folder: /Testing
-    bootstrap_foreman_fqdn: satellite.lab.integrate.zone
-    bootstrap_download_method: http
-    bootstrap_org: "IntegrateZone"
-    bootstrap_location: "Auckland"
-    bootstrap_activationkey: "RHEL8.Base"
-    bootstrap_login: ""
-    bootstrap_password: ""
-    bootstrap_hostgroup: "RHEL8"
-    bootstrap_additional_args: ""
-    bootstrap_target_path: /root/bootstrap.py
-    bootstrap_local_copy: False
-
   vars_files:
     - .majikmike
+    - config.yaml
 
   tasks:
 
@@ -39,7 +25,7 @@
       template: "{{ template }}"
       name: "{{ inventory_hostname }}"
       networks:
-        - name: "VLAN10"
+        - name: "{{ network_vlan }}"
           type: static
           ip: "{{ ip_address }}"
           netmask: "{{ ip_mask }}"
@@ -68,30 +54,33 @@
     delegate_to: localhost
     register: vm_guest_info
 
-  - name: Confirm "{{ inventory_hostname }}" is available and print out the status
-    debug: 
-      msg: "{{ inventory_hostname }}: powered state: {{ vm_guest_info.instance.hw_power_status }} uuid: {{ vm_guest_info.instance.instance_uuid }}"
+  - name: Register to satellite if its available
+    when: bootstrap_foreman_fqdn != None
+    block:
+      - name: Confirm "{{ inventory_hostname }}" is available and print out the status
+        debug: 
+          msg: "{{ inventory_hostname }}: powered state: {{ vm_guest_info.instance.hw_power_status }} uuid: {{ vm_guest_info.instance.instance_uuid }}"
 
-  - name: download bootstrap.py from {{ bootstrap_foreman_fqdn }}
-    get_url:
-      dest: "{{ bootstrap_target_path }}"
-      url: "{{ bootstrap_download_method }}://{{ bootstrap_foreman_fqdn }}/pub/bootstrap.py"
-    when: not bootstrap_local_copy
+      - name: download bootstrap.py from {{ bootstrap_foreman_fqdn }}
+        get_url:
+          dest: "{{ bootstrap_target_path }}"
+          url: "{{ bootstrap_download_method }}://{{ bootstrap_foreman_fqdn }}/pub/bootstrap.py"
+        when: not bootstrap_local_copy
 
-  - name: copy bootstrap.py from local machine
-    copy:
-      dest: "{{ bootstrap_target_path }}"
-      src: bootstrap.py
-    when: bootstrap_local_copy
+      - name: copy bootstrap.py from local machine
+        copy:
+          dest: "{{ bootstrap_target_path }}"
+          src: bootstrap.py
+        when: bootstrap_local_copy
 
-  - name: generate bootstrap.py arguments
-    set_fact:
-      bootstrap_args: "--server {{ bootstrap_foreman_fqdn }} --organization '{{ bootstrap_org }}' --location '{{ bootstrap_location }}' --activationkey '{{ bootstrap_activationkey }}' --download-method {{ bootstrap_download_method }}"
-      bootstrap_foreman_args: "{% if bootstrap_password != '' %}--login '{{ bootstrap_login }}' --password '{{ bootstrap_password }}' --hostgroup '{{ bootstrap_hostgroup }}'{% else %}--skip foreman{% endif %}"
+      - name: generate bootstrap.py arguments
+        set_fact:
+          bootstrap_args: "--server {{ bootstrap_foreman_fqdn }} --organization '{{ bootstrap_org }}' --location '{{ bootstrap_location }}' --activationkey '{{ bootstrap_activationkey }}' --download-method {{ bootstrap_download_method }}"
+          bootstrap_foreman_args: "{% if bootstrap_password != '' %}--login '{{ bootstrap_login }}' --password '{{ bootstrap_password }}' --hostgroup '{{ bootstrap_hostgroup }}'{% else %}--skip foreman{% endif %}"
 
-  - name: run bootstrap.py
-    command: "/usr/libexec/platform-python {{ bootstrap_target_path }} {{ bootstrap_args }} {{ bootstrap_foreman_args }} {{ bootstrap_additional_args }} --force "
+      - name: run bootstrap.py
+        command: "/usr/libexec/platform-python {{ bootstrap_target_path }} {{ bootstrap_args }} {{ bootstrap_foreman_args }} {{ bootstrap_additional_args }} --force "
 
-  - name: remove bootstrap.py
-    file:
-      path: "{{ bootstrap_target_path }}"
+      - name: remove bootstrap.py
+        file:
+          path: "{{ bootstrap_target_path }}"

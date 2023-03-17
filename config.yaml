@@ -1,0 +1,15 @@
+template: RHEL8-U2HW15
+folder: /Testing
+network_vlan: VLAN100
+bootstrap_foreman_fqdn: satellite.lab.integrate.zone
+bootstrap_download_method: http
+bootstrap_org: "IntegrateZone"
+bootstrap_location: "Auckland"
+bootstrap_activationkey: "RHEL8.Base"
+bootstrap_login: ""
+bootstrap_password: ""
+bootstrap_hostgroup: "RHEL8"
+bootstrap_additional_args: ""
+bootstrap_target_path: /root/bootstrap.py
+bootstrap_local_copy: False
+
