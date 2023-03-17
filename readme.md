@@ -63,8 +63,8 @@ The playbook may attempt to connect to a different IP. Update the ***inventory**
 
 8. community.vmware  collection is required which required pyvmomi installed via pip   
 
-       ansible-galaxy install collection community.vmware
-       pip3 install pyvmomi
+       $ ansible-galaxy install collection community.vmware
+       $ pip3 install pyvmomi
 
 ## Provisioning
 
