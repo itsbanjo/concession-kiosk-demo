@@ -17,12 +17,22 @@ This is intended for beginners to intermediate in containerized applications and
 1. A working access to access.redhat.com for registering the VM to Red Hat using the *Red Hat Developer Subscription for Individual*.
 2. The pool ID for your *Red Hat Developer Subscription for Individual* that will be later used in a YAML file.
 3. For VM's deployed in VMWare, a working account that is able to provision a VM is required. 
-5. An optional running and configured Satellite to use Activation Keys. The playbook will switch to manual subscription method via access.redhat.com
+5. An optional configured Satellite to use Activation Keys. The playbook will switch to manual subscription method via access.redhat.com
 
 
 ### Traditional application deployment: 
-1. To deploy the three tier application using Virtualbox, simply invoke *vagrant up* to provision the VMs.
-2. Run *ansible-playbook -i inventory --vault-password-file .passwd all.yaml -u root*
+1. To deploy the three tier application using Virtualbox, simply invoke *vagrant up* to provision the VMs and these will be assigned with the following IP's by default:   
+
+|-----------|-----------------|
+| Frontend  | 192.168.100.103 |
+| backend   | 192.168.100.104 | 
+| mongodb   | 192.168.100.105 | 
+
+The playbook may attempt to connect to a different IP. Update the *inventory* to connect successfully.   
+
+2. During the provisionining, it will ask you which interface to use.  Choose the one that is plugged in to your current network to create a bridge connection to your subnet.
+3. Run *ansible-playbook -i inventory --vault-password-file .passwd all.yaml -u vagrant*
+
    
 
 
