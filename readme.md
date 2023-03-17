@@ -23,6 +23,7 @@ This is intended for beginners to intermediate in containerized applications and
 ### Traditional application deployment: 
 1. To deploy the three tier application using Virtualbox, simply invoke *vagrant up* to provision the VMs and these will be assigned with the following IP's by default:   
 
+| hostname  | ip address      |
 |-----------|-----------------|
 | Frontend  | 192.168.100.103 |
 | backend   | 192.168.100.104 | 
