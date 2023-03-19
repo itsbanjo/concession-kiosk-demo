@@ -20,11 +20,12 @@ This is intended for beginners to intermediate in containerized applications and
 
 ## Requirements:
 
-1. A working access to access.redhat.com for registering the VM to Red Hat using the *Red Hat Developer Subscription for Individual*.
-2. The pool ID for your *Red Hat Developer Subscription for Individual* maybe required in *config.yaml* to successfully register the VM if your account contains subscriptions already. 
-3. If you have a working Red Hat Satellite, you can use the ActivationKeys to register. Otherwise, the playbook will switch to manual subscription using your username and password. 
-4. If you choose VSphere to deploy the VMs, a working account to successfully provision a VM is required. 
-5. Create an ansible vault file named ***.majikmike*** before starting the provisioning process and should contain the following variables listed below:
+1. A running OpenShift or OpenShift Local
+2. A working access to access.redhat.com for registering the VM to Red Hat using the *Red Hat Developer Subscription for Individual*.
+3. The pool ID for your *Red Hat Developer Subscription for Individual* maybe required in *config.yaml* to successfully register the VM if your account contains subscriptions already. 
+4. If you have a working Red Hat Satellite, you can use the ActivationKeys to register. Otherwise, the playbook will switch to manual subscription using your username and password. 
+5. If you choose VSphere to deploy the VMs, a working account to successfully provision a VM is required. 
+6. Create an ansible vault file named ***.majikmike*** before starting the provisioning process and should contain the following variables listed below:
 
 
        $ ansible-vault create .majikmike
@@ -98,6 +99,22 @@ To provision a VM in VCenter and deploy the application:
        $ ansible-playbook mongodb.yaml --vault-password-file .passwd -i inventory  
 
 
-## Testing
+## Testing the traditional deployment
 
-Browse the frontend site using an IP or the fully qualified domain name (FQDN) that you've assigned for the frontend using port 8080
+Browse the frontend site using an IP or the fully qualified domain name (FQDN) that you've assigned for the frontend using port 8080 (e.g. *http://192.168.100.103:8080*)
+
+
+
+## Deploying in OpenShift 
+
+Run the following commands in the openshift/ folder and this will provision the application immediately. 
+
+       $ oc new-project concession
+       $ oc new-app https://github.com/jankleinert/concession-kiosk-backend --name backend -e MONGODB_USER=concession -e MONGODB_PASSWORD=hello1234 -e DATABASE_SERVICE_NAME=mongodb -e MONGODB_DATABASE=concession
+       $ oc new-app https://github.com/jankleinert/concession-kiosk-frontend --name frontend -e COMPONENT_BACKEND_HOST=backend -e COMPONENT_BACKEND_PORT=8080
+       $ oc import-image registry.access.redhat.com/rhscl/mongodb-36-rhel7 --confirm 
+       $ oc process -f template.yaml -p MONGODB_USER=concession -p MONGODB_DATABASE=concession -p MONGODB_PASSWORD=hello1234 -p NAMESPACE=kiosk | oc apply -f - 
+       $ oc expose svc
+       $ oc get routes
+
+Then browse the URL from the route results of the frontend above
