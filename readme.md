@@ -1,5 +1,5 @@
 
-#The three tier application story
+# The three tier application story
 
 ![Frontend GUI](https://raw.githubusercontent.com/itsbanjo/concession-kiosk-demo/aae0e3838c9074da7986672a38455ae7a411e96f/artefacts/concession-kiosk.png)
 
