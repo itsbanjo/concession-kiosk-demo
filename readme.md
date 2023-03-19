@@ -1,3 +1,9 @@
+
+#The three tier application story
+
+![Frontend GUI](https://raw.githubusercontent.com/itsbanjo/concession-kiosk-demo/aae0e3838c9074da7986672a38455ae7a411e96f/artefacts/concession-kiosk.png)
+
+
 ## Purpose and Goal
 
 To showcase the speed, consistency, and simplicity of deploying a containerized applications using an OpenShift Container Platform (OCP) compared to deploying application using a traditional architecture. One three-tier application called "Concession Kiosk" is deployed using 3 RHEL instances of VMs via VCenter or VirtualBox. Then the same application is deployed into OpenShift invoking a few *oc* commands.
@@ -90,3 +96,8 @@ To provision a VM in VCenter and deploy the application:
        $ ansible-playbook frontend.yaml --vault-password-file .passwd -i inventory  
        $ ansible-playbook backend.yaml --vault-password-file .passwd -i inventory  
        $ ansible-playbook mongodb.yaml --vault-password-file .passwd -i inventory  
+
+
+## Testing
+
+Browse the frontend site using an IP or the fully qualified domain name (FQDN) that you've assigned for the frontend using port 8080
