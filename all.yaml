@@ -28,17 +28,28 @@
             virtual: true
           when: virtualbox
 
-        - name: Register if system is virtualbox
+        - name: Registering the system if its VirtualBox
           block:
-            - name: Run the subscription-manager
+            - name: Run the subscription-manager with rhsm_pool_id
               redhat_subscription:
                state: present
                username: "{{ rhsm_username }}"
                password: "{{ rhsm_password }}"
                pool: "{{ rhsm_pool_id }}"
               register: subs_status
-          when: virtualbox
+          when: virtualbox and rhsm_pool_id != None
  
+         - name: Register if system is virtualbox
+          block:
+            - name: Run the subscription-manager with rhsm_pool_id
+              redhat_subscription:
+               state: present
+               username: "{{ rhsm_username }}"
+               password: "{{ rhsm_password }}"
+               pool: "{{ rhsm_pool_id }}"
+              register: subs_status
+          when: virtualbox and rhsm_pool_id is None
+
         - name: Install nodejs and git
           ansible.builtin.yum: 
             name: 
