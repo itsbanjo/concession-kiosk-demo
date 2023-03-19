@@ -87,4 +87,6 @@ The playbook may attempt to connect to a different IP. Update the **VagrantFile*
 To provision a VM in VCenter and deploy the application:
 
        $ ansible-playbook provision.yaml --vault-password-file .passwd -i inventory
-       $ ansible-playbook all.yaml --vault-password-file .passwd -i inventory  
+       $ ansible-playbook frontend.yaml --vault-password-file .passwd -i inventory  
+       $ ansible-playbook backend.yaml --vault-password-file .passwd -i inventory  
+       $ ansible-playbook mongodb.yaml --vault-password-file .passwd -i inventory  
