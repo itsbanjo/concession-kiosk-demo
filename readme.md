@@ -77,19 +77,14 @@ The playbook may attempt to connect to a different IP. Update the **VagrantFile*
 
 6. For demo purposes, you can create a .passwd file that contains the vault password for ease of use. However, you must delete these after demo.  
 
-8. community.vmware  collection is required which required pyvmomi installed via pip   
+8. community.vmware  collection is **required** which required pyvmomi installed via pip   
 
        $ ansible-galaxy install collection community.vmware
        $ pip3 install pyvmomi
 
 ## Provisioning
 
-To provision a VM in VCenter:
+To provision a VM in VCenter and deploy the application:
 
        $ ansible-playbook provision.yaml --vault-password-file .passwd -i inventory
-
-
-
-To deploy the applications and MongoDB server:  
-
-   $ ansible-playbook all.yaml --vault-password-file .passwd -i inventory  
+       $ ansible-playbook all.yaml --vault-password-file .passwd -i inventory  
