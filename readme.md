@@ -20,7 +20,7 @@ This is intended for beginners to intermediate in containerized applications and
 
 ## Requirements:
 
-1. A running OpenShift or OpenShift Local
+1. A running OpenShift
 2. A working access to access.redhat.com for registering the VM to Red Hat using the *Red Hat Developer Subscription for Individual*.
 3. The pool ID for your *Red Hat Developer Subscription for Individual* maybe required in *config.yaml* to successfully register the VM if your account contains subscriptions already. 
 4. If you have a working Red Hat Satellite, you can use the ActivationKeys to register. Otherwise, the playbook will switch to manual subscription using your username and password. 
