@@ -40,15 +40,6 @@
     ansible.builtin.yum: 
       name: 
         - nodejs
-        - git
-      state: present
-
-  - name: Install firewall pip packages
-    pip:
-      name: 
-        - firewall
-        - python-firewall
-    ignore_errors: yes
     
   - name: Create user kiosk
     user:
