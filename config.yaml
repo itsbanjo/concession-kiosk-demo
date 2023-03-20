@@ -1,7 +1,7 @@
 template: RHEL8-U2HW15
 folder: /Testing
 network_vlan: VLAN100
-bootstrap_foreman_fqdn: satellite.lab.integrate.zone
+bootstrap_foreman_fqdn: 
 bootstrap_download_method: http
 bootstrap_org: "IntegrateZone"
 bootstrap_location: "Auckland"
