@@ -26,3 +26,4 @@ all:
         gateway: 172.21.100.1
   vars:
     domain: lab.integrate.zone
+    ansible_ssh_user: root
