@@ -39,7 +39,7 @@
               register: subs_status
           when: virtualbox and rhsm_pool_id != None
  
-         - name: Register if system is virtualbox
+        - name: Register if system is virtualbox
           block:
             - name: Run the subscription-manager with rhsm_pool_id
               redhat_subscription:
