@@ -1,4 +1,4 @@
-template: RHEL8-U2HW14
+template: RHEL8-U1HW14
 folder: /Testing
 network_vlan: VLAN100
 bootstrap_foreman_fqdn: 
