@@ -45,9 +45,10 @@
 
   - name: Install firewall pip packages
     pip:
-      name: firewall
+      name: 
+        - firewall
+        - python-firewall
     
-
   - name: Create user kiosk
     user:
       name: kiosk
