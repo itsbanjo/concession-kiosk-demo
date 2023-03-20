@@ -43,6 +43,11 @@
         - git
       state: present
 
+  - name: Install firewall pip packages
+    pip:
+      name: firewall
+    
+
   - name: Create user kiosk
     user:
       name: kiosk
