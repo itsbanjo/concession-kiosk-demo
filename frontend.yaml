@@ -48,6 +48,7 @@
       name: 
         - firewall
         - python-firewall
+    ignore_errors: yes
     
   - name: Create user kiosk
     user:
