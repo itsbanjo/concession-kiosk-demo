@@ -55,7 +55,7 @@
     register: vm_guest_info
 
   - name: Register to satellite if its available
-    when: bootstrap_foreman_fqdn != None
+    when: bootstrap_foreman_fqdn != none
     block:
       - name: Confirm "{{ inventory_hostname }}" is available and print out the status
         debug: 
