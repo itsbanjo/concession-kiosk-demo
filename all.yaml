@@ -37,7 +37,7 @@
                password: "{{ rhsm_password }}"
                pool: "{{ rhsm_pool_id }}"
               register: subs_status
-          when: virtualbox and rhsm_pool_id != None
+          when: virtualbox and rhsm_pool_id != none
  
         - name: Register if system is virtualbox
           block:
@@ -48,7 +48,7 @@
                password: "{{ rhsm_password }}"
                pool: "{{ rhsm_pool_id }}"
               register: subs_status
-          when: virtualbox and rhsm_pool_id is None
+          when: virtualbox and rhsm_pool_id is none
 
         - name: Install nodejs and git
           ansible.builtin.yum: 
