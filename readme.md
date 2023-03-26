@@ -20,12 +20,12 @@ This is intended for beginners to intermediate in containerized applications and
 
 ## Requirements:
 
-1. A running OpenShift
+1. A running OpenShift, minimum OpenShift Local
 2. A working access to access.redhat.com for registering the VM to Red Hat using the *Red Hat Developer Subscription for Individual*.
-3. The pool ID for your *Red Hat Developer Subscription for Individual* maybe required in *config.yaml* to successfully register the VM if your account contains subscriptions already. 
-4. If you have a working Red Hat Satellite, you can use the ActivationKeys to register. Otherwise, the playbook will switch to manual subscription using your username and password. 
+3. The pool ID for your *Red Hat Developer Subscription for Individual* maybe required in *config.yaml* to successfully register the VM if you want to register the hosts in a specific subscriptions. 
+4. If you have a working Red Hat Satellite, you can use the ActivationKeys to register. Otherwise, the playbook will switch to manual subscription using your username and password. (Optional)
 5. If you choose VSphere to deploy the VMs, a working account to successfully provision a VM is required. 
-6. Create an ansible vault file named ***.majikmike*** before starting the provisioning process and should contain the following variables listed below:
+6. You **must** Create an ansible vault file named ***.majikmike*** before starting the provisioning process and should contain the following variables listed below:
 
 
        $ ansible-vault create .majikmike
@@ -40,7 +40,7 @@ This is intended for beginners to intermediate in containerized applications and
 
 
 ## Deployment 
-### Traditional application deployment using VirtualBox: 
+### Traditional application deployment using VirtualBox: (Preferred and easiest)
 1. To deploy the three tier application using Virtualbox, simply invoke *vagrant up* to provision the VMs and these will be assigned with a default IP:
 
        $ vagrant up    
@@ -53,7 +53,7 @@ This is intended for beginners to intermediate in containerized applications and
 
 The playbook may attempt to connect to a different IP. Update the **VagrantFile** accordingly. 
 
-1. During the provisionining, it will ask you which interface to use.  Choose the one that is plugged in to your current network to create a bridge connection to your subnet.
+1. During the provisionining, it will ask you which interface to use.  Choose the one that is plugged in to your current network to create a bridge connection to your subnet (see Network Diagram).
    
 2. Run, ensure the **VagrantFile** and **inventory** file has the same IP addresses then invoke the command below to start the provisioning of the three tier application. It will roughly take 5 minutes to provision the entire system
 3. 
@@ -67,11 +67,11 @@ The playbook may attempt to connect to a different IP. Update the **VagrantFile*
    
 2. 3. To skip auto-registering to Satellite, simply leave **bootstrap_foreman_fqdn** in **config.yaml** empty.
    
-3. A RHEL8 VM template **must** be available for use before you can start provisioning the three tier application. Ensure that VM template contains **open-vm-tools** and **perl** for the VMware customization to successfully apply the network customizations via the vcenter API. 
+3. A RHEL8 VM template **must** be available for use before you can start provisioning the three tier application. Ensure that VM template contains **open-vm-tools** and **perl** for the VMware customization to successfully apply the network customizations via the VCenter API. 
    
-4. All three nodes must be reachable by the ansible controller node and are able to successfully intercommunicate. Its preferred that these VM's are in the same VLAN and a flat subnet for demo purposes to ensure a simple and successful deployment. 
+4. All three nodes must be reachable by the ansible controller node and are able to successfully intercommunicate. Its preferred that these VM's are in the **same VLAN** and a flat subnet for demo purposes to ensure a simple and successful deployment. 
    
-5. An ansible-vault named .majikmike in your working directory and should contain the following variables listed below. These are used for cloning a template and preconfiguring the network, hostname, and DNS name using open-vm-tools:
+5. An ansible-vault named **.majikmike** in your working directory and should contain the following variables listed below. These are used for cloning a template and preconfiguring the network, hostname, and DNS name using open-vm-tools:
 
        vcenter_hostname:
        vcenter_username:  
@@ -107,7 +107,7 @@ Browse the frontend site using an IP or the fully qualified domain name (FQDN) t
 
 ## Deploying in OpenShift 
 
-Run the following commands in the openshift/ folder and this will provision the application immediately. 
+Run the following commands in the openshift/ folder and this will provision the application immediately. Perform the same command for your other OpenShift clusters. 
 
        $ oc new-project concession
        $ oc new-app https://github.com/jankleinert/concession-kiosk-backend --name backend -e MONGODB_USER=concession -e MONGODB_PASSWORD=hello1234 -e DATABASE_SERVICE_NAME=mongodb -e MONGODB_DATABASE=concession  
