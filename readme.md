@@ -1,7 +1,7 @@
 
 # Traditional to OpenShift
 
-![Frontend GUI](https://raw.githubusercontent.com/itsbanjo/concession-kiosk-demo/aae0e3838c9074da7986672a38455ae7a411e96f/artefacts/concession-kiosk.png)
+
 
 
 ## Purpose and Goal
@@ -9,6 +9,8 @@
 A showcase the deployment transition of the same application from a traditional, OpenShift Local, to an OpenShift Platform. An experience to validate speed, consistency, and simplicity of deploying a containerized applications using an OpenShift Container Platform (OCP) compared to deploying application using a traditional architecture. A three-tier application called "Concession Kiosk" is deployed using 3 RHEL instances of VMs via VCenter or VirtualBox, then the same application is deployed into OpenShift invoking a few *oc* commands for comparison. 
 
 Typically in an Enterprise environment, deployment of a three-tier application requires several key stakeholders to comission into productions. Unlike in the Kubernetes world such as OCP, the comissioning new infrastructure resources to meet the needs is uncommonly required. Hence, developer can take control the deployment consistently, securely, and faster response to the business needs. While Adminsitrator of the platform can focus on improving their BAU operations by adding additional new capabilities in the platform. Since OpenShift is managed using YAML, both developers and IT operations can work more collaboratively using the latest technologies without compromising agility.
+
+![The Sample Application](https://raw.githubusercontent.com/itsbanjo/concession-kiosk-demo/aae0e3838c9074da7986672a38455ae7a411e96f/artefacts/concession-kiosk.png)
 
 Secondary objective is to display the power of Ansible, combined with HashiCorp's Vagrant for provisioning and configuration of system resources using a single YAML and Vagrantfile code.
 
