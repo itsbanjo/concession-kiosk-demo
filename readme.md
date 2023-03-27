@@ -26,12 +26,13 @@ Intended for beginners to intermediate in containerized applications and kuberne
 
 ## Requirements:
 
-1. A running OpenShift, minimum OpenShift Local
-2. A working access to access.redhat.com for registering the VM to Red Hat using the *Red Hat Developer Subscription for Individual*.
-3. The pool ID for your *Red Hat Developer Subscription for Individual* maybe required in *config.yaml* to successfully register the VM if you want to register the hosts in a specific subscriptions. 
-4. If you have a working Red Hat Satellite, you can use the ActivationKeys to register. Otherwise, the playbook will switch to manual subscription using your username and password. (Optional)
-5. If you choose VSphere to deploy the VMs, a working account to successfully provision a VM is required. 
-6. You **must** Create an ansible vault file named ***.majikmike*** before starting the provisioning process and should contain the following variables listed below:
+1. A running OpenShift, (minimum OpenShift Local)
+2. VirtualBox (recommended!)
+3. A working access to access.redhat.com for registering the VM to Red Hat using the *Red Hat Developer Subscription for Individual*.
+4. The pool ID for your *Red Hat Developer Subscription for Individual* maybe required in *config.yaml* to successfully register the VM if you want to register the hosts in a specific subscriptions. 
+5. If you have a working Red Hat Satellite, you can use the ActivationKeys to register. Otherwise, the playbook will switch to manual subscription using your username and password. (Optional)
+6. If you choose VSphere to deploy the VMs, a working account to successfully provision a VM is required. 
+7. You **must** Create an ansible vault file named ***.majikmike*** before starting the provisioning process and should contain the following variables listed below:
 
 
        $ ansible-vault create .majikmike
