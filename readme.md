@@ -64,7 +64,7 @@ The playbook may attempt to connect to a different IP. Update the **VagrantFile*
    
 2. Run, ensure the **VagrantFile** and **inventory** file has the same IP addresses then invoke the command below to start the provisioning of the three tier application. It will roughly take 5 minutes to provision the entire system
 3. 
-   ansible-playbook -i inventory --vault-password-file .passwd all.yaml -u root
+   ```ansible-playbook -i inventory --vault-password-file .passwd all.yaml -u root```
 
    
 ### VCenter deployment 
