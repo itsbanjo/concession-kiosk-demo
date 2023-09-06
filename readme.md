@@ -47,7 +47,7 @@ Intended for beginners to intermediate in containerized applications and kuberne
 
 
 ## Deployment 
-### Traditional application deployment using VirtualBox: (Preferred and easiest)
+### VirtualBox: (Preferred and easiest)
 1. To deploy the three tier application using Virtualbox, simply invoke *vagrant up* to provision the VMs and these will be assigned with a default IP:
 
        $ vagrant up    
