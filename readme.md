@@ -47,7 +47,7 @@ Intended for beginners to intermediate in containerized applications and kuberne
 
 
 ## Deployment 
-### Traditional application deployment using VirtualBox: (Preferred and easiest)
+### VirtualBox: (Preferred and easiest)
 1. To deploy the three tier application using Virtualbox, simply invoke *vagrant up* to provision the VMs and these will be assigned with a default IP:
 
        $ vagrant up    
@@ -64,7 +64,7 @@ The playbook may attempt to connect to a different IP. Update the **VagrantFile*
    
 2. Run, ensure the **VagrantFile** and **inventory** file has the same IP addresses then invoke the command below to start the provisioning of the three tier application. It will roughly take 5 minutes to provision the entire system
 3. 
-   ansible-playbook -i inventory --vault-password-file .passwd all.yaml -u root
+   ```ansible-playbook -i inventory --vault-password-file .passwd all.yaml -u root```
 
    
 ### VCenter deployment 
@@ -100,6 +100,7 @@ The playbook may attempt to connect to a different IP. Update the **VagrantFile*
 
 To provision a VM in VCenter and deploy the application:
 
+       $ git clone https://github.com/itsbanjo/concession-kiosk-demo.git && cd concession-kiosk-demo
        $ ansible-playbook provision.yaml --vault-password-file .passwd -i inventory
        $ ansible-playbook frontend.yaml --vault-password-file .passwd -i inventory  
        $ ansible-playbook backend.yaml --vault-password-file .passwd -i inventory  
@@ -114,8 +115,9 @@ Browse the frontend site using an IP or the fully qualified domain name (FQDN) t
 
 ## Deploying in OpenShift 
 
-Run the following commands in the openshift/ folder and this will provision the application immediately. Perform the same command for your other OpenShift clusters. 
+Clone the repo if you haven't then run the following commands in the openshift/ folder and this will provision the application immediately. Perform the same command for your other OpenShift clusters. 
 
+       
        $ oc new-project concession
        $ oc new-app https://github.com/jankleinert/concession-kiosk-backend --name backend -e MONGODB_USER=concession -e MONGODB_PASSWORD=hello1234 -e DATABASE_SERVICE_NAME=mongodb -e MONGODB_DATABASE=concession  
        $ oc new-app https://github.com/jankleinert/concession-kiosk-frontend --name frontend -e COMPONENT_BACKEND_HOST=backend -e COMPONENT_BACKEND_PORT=8080   
