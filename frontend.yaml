@@ -56,7 +56,7 @@
 
   - name: Clone frontend application
     ansible.builtin.git: 
-      repo: https://github.com/jankleinert/concession-kiosk-frontend.git 
+      repo: https://github.com/itsbanjo/concession-kiosk-frontend.git 
       dest: "{{ deploy_dir }}"
     become: yes
     become_user: kiosk
