@@ -10,9 +10,11 @@
 
 ## Purpose and Goal
 
-A showcase the deployment transition of the same application from a traditional, OpenShift Local, to an OpenShift Platform. An experience to validate speed, consistency, and simplicity of deploying a containerized applications using an OpenShift Container Platform (OCP) compared to deploying application using a traditional architecture. A three-tier application called "Concession Kiosk" is deployed using 3 RHEL instances of VMs via VCenter or VirtualBox, then the same application is deployed into OpenShift invoking a few *oc* commands for comparison. 
+## Purpose and Goal
 
-Typically in an Enterprise environment, deployment of a three-tier application requires several key stakeholders to comission into productions. Unlike in the Kubernetes world such as OCP, the comissioning new infrastructure resources to meet the needs is uncommonly required. Hence, developer can take control the deployment consistently, securely, and faster response to the business needs. While Adminsitrator of the platform can focus on improving their BAU operations by adding additional new capabilities in the platform. Since OpenShift is managed using YAML, both developers and IT operations can work more collaboratively using the latest technologies without compromising agility.
+The purpose of this repository is to showcase the transition of deploying an application, initially hosted on a traditional environment either a VMware or Virtualbox environmen then onto an OpenShift Local environment and finally to an OpenShift Platform. The goal is to provide an experiential comparison of the deployment process in terms of speed, consistency, and simplicity for containerized applications, utilizing the OpenShift Container Platform (OCP) versus a traditional deployment architecture. Specifically, we will deploy a three-tier application named "Concession Kiosk" on 3 RHEL instances of VMs through either VCenter or VirtualBox. Subsequently, we will deploy the same application on OpenShift using a few *oc* commands for comparative analysis.
+
+In the typical Enterprise environment, deploying a three-tier application involves the coordination of multiple key stakeholders for production commissioning. However, in the Kubernetes world like OCP, the need for commissioning new infrastructure resources to meet specific requirements is considerably less common. Consequently, developers have the capability to consistently and securely manage deployments, responding faster to business needs. Simultaneously, platform administrators can concentrate on enhancing their Business-As-Usual (BAU) operations by incorporating additional capabilities into the platform. As OpenShift is managed using YAML, both developers and IT operations can collaborate effectively utilizing the latest technologies, preserving agility without compromise.
 
 ![The Sample Application](https://raw.githubusercontent.com/itsbanjo/concession-kiosk-demo/aae0e3838c9074da7986672a38455ae7a411e96f/artefacts/concession-kiosk.png)
 
@@ -25,14 +27,20 @@ Intended for beginners to intermediate in containerized applications and kuberne
 ## Network Diagram
 
 ## Requirements:
+### Virtualbox deployment (Recommended)
 
-1. A running OpenShift, (minimum OpenShift Local)
+1. ![Virtualbox](https://www.virtualbox.org/wiki/Downloads)
+2. ![OpenShift Local] (https://console.redhat.com/openshift/downloads)
+3. ![Vagrant](https://developer.hashicorp.com/vagrant/downloads)
+4. ![Red Hat Account]([https://access.](https://www.redhat.com/wapps/ugc/register.html)
+
+### VSphere Environment
+1. ![OpenShift Local] (https://console.redhat.com/openshift/downloads)
 2. VirtualBox (recommended!)
 3. A working access to access.redhat.com for registering the VM to Red Hat using the *Red Hat Developer Subscription for Individual*.
-4. The pool ID for your *Red Hat Developer Subscription for Individual* maybe required in *config.yaml* to successfully register the VM if you want to register the hosts in a specific subscriptions. 
-5. If you have a working Red Hat Satellite, you can use the ActivationKeys to register. Otherwise, the playbook will switch to manual subscription using your username and password. (Optional)
-6. If you choose VSphere to deploy the VMs, a working account to successfully provision a VM is required. 
-7. You **must** Create an ansible vault file named ***.majikmike*** before starting the provisioning process and should contain the following variables listed below:
+4. If you have a working Red Hat Satellite, you can use the ActivationKeys to register. Otherwise, the playbook will switch to manual subscription using your username and password. (Optional)
+5. If you choose VSphere to deploy the VMs, a working account to successfully provision a VM is required. 
+6. You **must** Create an ansible vault file named ***.majikmike*** before starting the provisioning process and should contain the following variables listed below:
 
 
        $ ansible-vault create .majikmike
@@ -45,9 +53,8 @@ Intended for beginners to intermediate in containerized applications and kuberne
        rhsm_password: 
        rhsm_pool_id: 
 
-
 ## Deployment 
-### VirtualBox: (Preferred and easiest)
+### VirtualBox: (Preferred, easiest and fastest)
 1. To deploy the three tier application using Virtualbox, simply invoke *vagrant up* to provision the VMs and these will be assigned with a default IP:
 
        $ vagrant up    
@@ -111,13 +118,11 @@ To provision a VM in VCenter and deploy the application:
 
 Browse the frontend site using an IP or the fully qualified domain name (FQDN) that you've assigned for the frontend using port 8080 (e.g. *http://192.168.100.103:8080*)
 
-
-
 ## Deploying in OpenShift 
 
 Clone the repo if you haven't then run the following commands in the openshift/ folder and this will provision the application immediately. Perform the same command for your other OpenShift clusters. 
-
-       
+*NOTE:* alternatively, you can run ./deploy.sh located in the openshift folder
+ ```
        $ oc new-project concession
        $ oc new-app https://github.com/itsbanjo/concession-kiosk-backend --name backend -e MONGODB_USER=concession -e MONGODB_PASSWORD=hello1234 -e DATABASE_SERVICE_NAME=mongodb -e MONGODB_DATABASE=concession  
        $ oc new-app https://github.com/itsbanjo/concession-kiosk-frontend --name frontend -e COMPONENT_BACKEND_HOST=backend -e COMPONENT_BACKEND_PORT=8080   
@@ -125,5 +130,5 @@ Clone the repo if you haven't then run the following commands in the openshift/ 
        $ oc process -f template.yaml -p MONGODB_USER=concession -p MONGODB_DATABASE=concession -p MONGODB_PASSWORD=hello1234 -p NAMESPACE=concession | oc apply -f - 
        $ oc expose svc frontend
        $ oc get routes  
-
-Then browse the URL from the route results of the frontend above
+```
+Then`` browse the URL from the route results of the frontend above
