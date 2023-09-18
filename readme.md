@@ -10,8 +10,6 @@
 
 ## Purpose and Goal
 
-## Purpose and Goal
-
 The purpose of this repository is to showcase the transition of deploying an application, initially hosted on a traditional environment either a VMware or Virtualbox environmen then onto an OpenShift Local environment and finally to an OpenShift Platform. The goal is to provide an experiential comparison of the deployment process in terms of speed, consistency, and simplicity for containerized applications, utilizing the OpenShift Container Platform (OCP) versus a traditional deployment architecture. Specifically, we will deploy a three-tier application named "Concession Kiosk" on 3 RHEL instances of VMs through either VCenter or VirtualBox. Subsequently, we will deploy the same application on OpenShift using a few *oc* commands for comparative analysis.
 
 In the typical Enterprise environment, deploying a three-tier application involves the coordination of multiple key stakeholders for production commissioning. However, in the Kubernetes world like OCP, the need for commissioning new infrastructure resources to meet specific requirements is considerably less common. Consequently, developers have the capability to consistently and securely manage deployments, responding faster to business needs. Simultaneously, platform administrators can concentrate on enhancing their Business-As-Usual (BAU) operations by incorporating additional capabilities into the platform. As OpenShift is managed using YAML, both developers and IT operations can collaborate effectively utilizing the latest technologies, preserving agility without compromise.
@@ -37,9 +35,10 @@ Intended for beginners to intermediate in containerized applications and kuberne
 
 ### VSphere Environment
 1. ![OpenShift Local](https://console.redhat.com/openshift/downloads)
-2. (Optional) If you have a working Red Hat Satellite, you can use the ActivationKeys to register. Otherwise, the playbook will switch to manual subscription using your username and password. 
-3. If you choose VSphere to deploy the VMs, a working account to successfully provision a VM is required. 
-4. You **must** Create an ansible vault file named ***.majikmike*** before starting the provisioning process and should contain the following variables listed below:
+2. ![OpenShift Client](https://console.redhat.com/openshift/downloads)
+3. (Optional) If you have a working Red Hat Satellite, you can use the ActivationKeys to register. Otherwise, the playbook will switch to manual subscription using your username and password. 
+4. If you choose VSphere to deploy the VMs, a working account to successfully provision a VM is required. 
+5. You **must** Create an ansible vault file named ***.majikmike*** before starting the provisioning process and should contain the following variables listed below:
 
 ```
        $ ansible-vault create .majikmike
@@ -79,7 +78,7 @@ The playbook may attempt to connect to a different IP. Update the **VagrantFile*
 
 1. The configuration for the folder, VM template name, and network VLAN is located in **configuration.yaml** which is exclusive for provision.yaml for the entire provisioning flow. 
    
-2. 3. To skip auto-registering to Satellite, simply leave **bootstrap_foreman_fqdn** in **config.yaml** empty.
+    To skip auto-registering to Satellite, simply leave **bootstrap_foreman_fqdn** in **config.yaml** empty.
    
 3. A RHEL8 VM template **must** be available for use before you can start provisioning the three tier application. Ensure that VM template contains **open-vm-tools** and **perl** for the VMware customization to successfully apply the network customizations via the VCenter API. 
    
