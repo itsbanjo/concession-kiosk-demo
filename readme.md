@@ -32,7 +32,7 @@ Intended for beginners to intermediate in containerized applications and kuberne
 1. ![Virtualbox](https://www.virtualbox.org/wiki/Downloads)
 2. ![OpenShift Local](https://console.redhat.com/openshift/downloads)
 3. ![Vagrant](https://developer.hashicorp.com/vagrant/downloads)
-4. ![Red Hat Account]([https://access.](https://www.redhat.com/wapps/ugc/register.html)
+4. ![Red Hat Account](https://www.redhat.com/wapps/ugc/register.html)
 
 ### VSphere Environment
 1. ![OpenShift Local] (https://console.redhat.com/openshift/downloads)
