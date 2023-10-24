@@ -130,4 +130,4 @@ Clone the repo if you haven't then run the following commands in the openshift/ 
        $ oc expose svc frontend
        $ oc get routes  
 ```
-Then`` browse the URL from the route results of the frontend above
+Then browse the URL from the route results of the frontend above
